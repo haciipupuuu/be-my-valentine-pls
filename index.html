@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hey Mpruy 💖</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* FALLBACK BACKGROUND IMAGE */
+body {
+  background: url("fallback.jpg") center / cover no-repeat fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* VIDEO BACKGROUND */
+#bgVideo {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -10;
+}
+
+/* OVERLAY */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(255,182,193,0.55);
+  z-index: -5;
+}
+
+/* CARD */
+.card {
+  background: #fff;
+  padding: 35px 30px;
+  border-radius: 25px;
+  text-align: center;
+  width: 90%;
+  max-width: 460px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+  position: relative;
+  z-index: 5;
+}
+
+h1 { color: #ff4d6d; }
+p { color: #555; font-size: 1.05rem; }
+
+.buttons, .options {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin: 15px 0;
+}
+
+button {
+  padding: 10px 22px;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: 0.3s;
+}
+
+#yesBtn { background: #ff4d6d; color: white; }
+#yesBtn:hover { transform: scale(1.1); }
+#noBtn { background: #eee; }
+
+input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  margin-top: 8px;
+}
+
+.success { display: none; }
+
+/* FOOD */
+.food-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 18px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.food-option img {
+  width: 120px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 14px;
+}
+
+.food-option.active img {
+  box-shadow: 0 0 20px #ff4d6d;
+  transform: scale(1.05);
+}
+
+/* FINAL SCREEN */
+#kissScreen {
+  position: fixed;
+  inset: 0;
+  background: rgba(255,105,135,0.85);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 50;
+}
+
+#kissScreen h1 {
+  font-size: 3rem;
+  color: white;
+}
+
+#kissScreen p {
+  font-size: 1.6rem;
+  color: white;
+}
+</style>
+</head>
+
+<body>
+
+<!-- VIDEO BACKGROUND -->
+<video
+  id="bgVideo"
+  autoplay
+  muted
+  loop
+  playsinline
+  preload="metadata"
+>
+  <source src="video/bg.mp4" type="video/mp4">
+</video>
+
+<!-- MAIN CARD -->
+<div class="card" id="mainCard">
+  <h1>Hey Mpruy 💕</h1>
+  <p>Will you be my Valentine? 🥰</p>
+  <div class="buttons">
+    <button id="yesBtn">Yes, of course 💖</button>
+    <button id="noBtn">No 🙈</button>
+  </div>
+</div>
+
+<!-- FOOD -->
+<div class="card success" id="foodCard">
+  <h1>Food Time 🍽️</h1>
+  <div class="options">
+    <div class="food-option" data-food="Chinese 🥢"><img src="chinese.jpg">Chinese 🥢</div>
+    <div class="food-option" data-food="Japanese 🍣"><img src="jepang.jpg">Japanese 🍣</div>
+    <div class="food-option" data-food="Steakhouse 🥩"><img src="steak.jpg">Steakhouse 🥩</div>
+    <div class="food-option" data-food="Local Food 🍜"><img src="locas.jpg">Local Food 🍜</div>
+  </div>
+  <button id="toActivity" style="background:#ff4d6d;color:white;">Next 💕</button>
+</div>
+
+<!-- ACTIVITY -->
+<div class="card success" id="activityCard">
+  <h1>Fun Time 🎉</h1>
+  <input id="activityInput" placeholder="Fun activity..." />
+  <p>Chocolate & flowers? 🍫🌹</p>
+  <div class="buttons">
+    <button class="giftBtn" data-gift="Yes 💝">Yes</button>
+    <button class="giftBtn" data-gift="No 😆">No</button>
+  </div>
+  <button id="submitBtn" style="background:#ff4d6d;color:white;">Submit 💌</button>
+</div>
+
+<!-- SUMMARY -->
+<div class="card success" id="summaryCard">
+  <h1>💝 Date Summary 💝</h1>
+  <p id="summaryFood"></p>
+  <p id="summaryActivity"></p>
+  <p id="summaryGift"></p>
+  <button id="kissBtn" style="background:#ff4d6d;color:white;">Final Kiss 💋</button>
+</div>
+
+<!-- FINAL -->
+<div id="kissScreen">
+  <h1>💋💖</h1>
+  <p>😘💋</p>
+</div>
+
+<script>
+let chosenFood="", chosenGift="";
+
+noBtn.onmouseover=()=>{
+  noBtn.style.transform=`translate(${Math.random()*200-100}px,${Math.random()*200-100}px)`;
+};
+
+yesBtn.onclick=()=>{
+  mainCard.style.display="none";
+  foodCard.style.display="block";
+};
+
+document.querySelectorAll(".food-option").forEach(o=>{
+  o.onclick=()=>{
+    document.querySelectorAll(".food-option").forEach(x=>x.classList.remove("active"));
+    o.classList.add("active");
+    chosenFood=o.dataset.food;
+  };
+});
+
+toActivity.onclick=()=>{
+  foodCard.style.display="none";
+  activityCard.style.display="block";
+};
+
+document.querySelectorAll(".giftBtn").forEach(b=>{
+  b.onclick=()=> chosenGift=b.dataset.gift;
+});
+
+submitBtn.onclick=()=>{
+  activityCard.style.display="none";
+  summaryCard.style.display="block";
+  summaryFood.textContent="🍽️ "+chosenFood;
+  summaryActivity.textContent="🎉 "+activityInput.value;
+  summaryGift.textContent="🎁 "+chosenGift;
+};
+
+kissBtn.onclick=()=>{
+  kissScreen.style.display="flex";
+};
+</script>
+
+</body>
+</html>
